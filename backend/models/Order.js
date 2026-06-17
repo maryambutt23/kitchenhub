@@ -2,20 +2,50 @@ const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema(
   {
-    customerName: String,
-    phone: String,
-    address: String,
+    customerName: {
+      type: String,
+      required: true,
+    },
 
+    phone: {
+      type: String,
+      required: true,
+    },
+
+    address: {
+      type: String,
+      required: true,
+    },
+
+    // 🔥 MAIN FIX (PRODUCT DETAILS)
     products: [
       {
-        productId: String,
-        name: String,
-        price: Number,
-        qty: Number,
+        name: {
+          type: String,
+          default: "Product",
+        },
+
+        image: {
+          type: String,
+          default: "",
+        },
+
+        price: {
+          type: Number,
+          default: 0,
+        },
+
+        quantity: {
+          type: Number,
+          default: 1,
+        },
       },
     ],
 
-    totalPrice: Number,
+    totalPrice: {
+      type: Number,
+      default: 0,
+    },
 
     status: {
       type: String,

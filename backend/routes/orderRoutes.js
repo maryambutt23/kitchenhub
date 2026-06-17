@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const Order = require("../models/Order");
-
-// 🔐 ADMIN AUTH MIDDLEWARE
 const verifyAdmin = require("../middleware/auth");
 
 
@@ -13,92 +11,97 @@ router.post("/", async (req, res) => {
   try {
     const { customerName, phone, address, cartItems, totalPrice } = req.body;
 
+    // validation
     if (!customerName || !phone || !address) {
-      return res.status(400).json({
-        message: "Missing customer details",
-      });
+      return res.status(400).json({ message: "Missing customer details" });
     }
 
-    if (!cartItems || cartItems.length === 0) {
-      return res.status(400).json({
-        message: "Cart is empty",
-      });
+    if (!Array.isArray(cartItems) || cartItems.length === 0) {
+      return res.status(400).json({ message: "Cart is empty" });
     }
 
+    // =====================
+    // FORMAT PRODUCTS PROPERLY
+    // =====================
+    const products = cartItems.map((item) => ({
+      name: item.name || "Product",
+
+      image: item.image
+        ? item.image.startsWith("http")
+          ? item.image
+          : item.image.startsWith("/uploads")
+          ? `http://localhost:5000${item.image}`
+          : item.image
+        : "",
+
+      price: item.price || 0,
+      quantity: item.quantity || item.qty || 1,
+    }));
+
+    // =====================
+    // SAVE ORDER
+    // =====================
     const newOrder = await Order.create({
       customerName,
       phone,
       address,
-      products: cartItems,
-      totalPrice,
+      products,
+      totalPrice: totalPrice || 0,
       status: "Pending",
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       message: "Order placed successfully",
       order: newOrder,
     });
 
   } catch (err) {
-    console.error("Order Error:", err.message);
-
-    res.status(500).json({
-      message: "Server Error",
-    });
+    console.error("ORDER ERROR:", err);
+    return res.status(500).json({ message: "Server Error" });
   }
 });
 
 
 // =====================
-// GET ALL ORDERS (ADMIN ONLY)
+// GET ALL ORDERS (ADMIN)
 // =====================
 router.get("/", verifyAdmin, async (req, res) => {
   try {
     const orders = await Order.find().sort({ createdAt: -1 });
-    res.json(orders);
+    return res.json(orders);
   } catch (err) {
-    res.status(500).json({
-      message: "Failed to fetch orders",
-    });
+    console.error("FETCH ERROR:", err);
+    return res.status(500).json({ message: "Failed to fetch orders" });
   }
 });
 
 
 // =====================
-// GET SINGLE ORDER (ADMIN)
+// GET SINGLE ORDER
 // =====================
 router.get("/:id", verifyAdmin, async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
 
     if (!order) {
-      return res.status(404).json({
-        message: "Order not found",
-      });
+      return res.status(404).json({ message: "Order not found" });
     }
 
-    res.json(order);
+    return res.json(order);
 
   } catch (err) {
-    res.status(500).json({
-      message: "Error fetching order",
-    });
+    console.error("GET ERROR:", err);
+    return res.status(500).json({ message: "Error fetching order" });
   }
 });
 
 
 // =====================
-// UPDATE ORDER STATUS
+// UPDATE STATUS
 // =====================
 router.put("/:id", verifyAdmin, async (req, res) => {
   try {
     const { status } = req.body;
-
-    if (!status) {
-      return res.status(400).json({
-        message: "Status is required",
-      });
-    }
 
     const updated = await Order.findByIdAndUpdate(
       req.params.id,
@@ -106,21 +109,14 @@ router.put("/:id", verifyAdmin, async (req, res) => {
       { new: true }
     );
 
-    if (!updated) {
-      return res.status(404).json({
-        message: "Order not found",
-      });
-    }
-
-    res.json({
+    return res.json({
       message: "Order updated successfully",
       order: updated,
     });
 
   } catch (err) {
-    res.status(500).json({
-      message: "Failed to update order",
-    });
+    console.error("UPDATE ERROR:", err);
+    return res.status(500).json({ message: "Failed to update order" });
   }
 });
 
@@ -130,22 +126,15 @@ router.put("/:id", verifyAdmin, async (req, res) => {
 // =====================
 router.delete("/:id", verifyAdmin, async (req, res) => {
   try {
-    const deleted = await Order.findByIdAndDelete(req.params.id);
+    await Order.findByIdAndDelete(req.params.id);
 
-    if (!deleted) {
-      return res.status(404).json({
-        message: "Order not found",
-      });
-    }
-
-    res.json({
+    return res.json({
       message: "Order deleted successfully",
     });
 
   } catch (err) {
-    res.status(500).json({
-      message: "Failed to delete order",
-    });
+    console.error("DELETE ERROR:", err);
+    return res.status(500).json({ message: "Failed to delete order" });
   }
 });
 
