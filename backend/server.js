@@ -17,9 +17,8 @@ app.use(express.json());
 
 
 // =====================
-// STATIC FILES (FIXED)
+// STATIC FILES
 // =====================
-// 🔥 FIX: absolute path instead of relative
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 
@@ -67,18 +66,23 @@ app.use((err, req, res, next) => {
 
 
 // =====================
-// DATABASE + SERVER
+// DATABASE + SERVER (FIXED FOR RAILWAY)
 // =====================
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
     console.log("✅ MongoDB Connected Successfully");
 
-    app.listen(PORT, () => {
+    const server = app.listen(PORT, "0.0.0.0", () => {
       console.log(`🚀 Server running on port ${PORT}`);
     });
+
+    server.on("error", (err) => {
+      console.log("❌ Server error:", err.message);
+    });
+
   })
   .catch((err) => {
     console.log("❌ MongoDB Connection Error:", err.message);
