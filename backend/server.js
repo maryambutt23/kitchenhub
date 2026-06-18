@@ -8,31 +8,16 @@ dotenv.config();
 
 const app = express();
 
-
-// =====================
-// CRASH HANDLERS (IMPORTANT)
-// =====================
-process.on("uncaughtException", (err) => {
-  console.log("❌ Uncaught Exception:", err);
-});
-
-process.on("unhandledRejection", (err) => {
-  console.log("❌ Unhandled Rejection:", err);
-});
-
-
 // =====================
 // MIDDLEWARE
 // =====================
 app.use(cors());
 app.use(express.json());
 
-
 // =====================
 // STATIC FILES
 // =====================
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-
 
 // =====================
 // ROUTES
@@ -45,58 +30,30 @@ app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/auth", authRoutes);
 
-
 // =====================
-// TEST ROUTE
+// HEALTH CHECK (IMPORTANT FOR RAILWAY)
 // =====================
 app.get("/", (req, res) => {
-  res.send("🚀 KitchenHub Backend Running Successfully");
+  res.status(200).send("🚀 KitchenHub API is running");
 });
 
+// =====================
+// PORT (CRITICAL FIX)
+// =====================
+const PORT = process.env.PORT;
 
 // =====================
-// 404 HANDLER
+// DATABASE + SERVER
 // =====================
-app.use((req, res) => {
-  res.status(404).json({
-    message: "Route not found",
-  });
-});
-
-
-// =====================
-// GLOBAL ERROR HANDLER
-// =====================
-app.use((err, req, res, next) => {
-  console.error("Server Error:", err.message);
-
-  res.status(500).json({
-    message: "Internal Server Error",
-    error: err.message,
-  });
-});
-
-
-// =====================
-// DATABASE + SERVER (RAILWAY SAFE)
-// =====================
-const PORT = process.env.PORT || 8080;
-
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
     console.log("✅ MongoDB Connected Successfully");
 
-    const server = app.listen(PORT, "0.0.0.0", () => {
+    app.listen(PORT, "0.0.0.0", () => {
       console.log(`🚀 Server running on port ${PORT}`);
     });
-
-    // Prevent Railway timeout issues
-    server.keepAliveTimeout = 120000;
-    server.headersTimeout = 120000;
-
   })
   .catch((err) => {
     console.log("❌ MongoDB Connection Error:", err.message);
-    process.exit(1);
   });
