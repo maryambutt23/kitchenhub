@@ -21,21 +21,13 @@ router.post("/", async (req, res) => {
     }
 
     // =====================
-    // FORMAT PRODUCTS PROPERLY
+    // SAFE PRODUCT FORMAT (FIXED)
     // =====================
     const products = cartItems.map((item) => ({
-      name: item.name || "Product",
-
-      image: item.image
-        ? item.image.startsWith("http")
-          ? item.image
-          : item.image.startsWith("/uploads")
-          ? `http://localhost:5000${item.image}`
-          : item.image
-        : "",
-
-      price: item.price || 0,
-      quantity: item.quantity || item.qty || 1,
+      name: item?.name || "Product",
+      image: item?.image || "",
+      price: item?.price || 0,
+      quantity: item?.quantity || item?.qty || 1,
     }));
 
     // =====================

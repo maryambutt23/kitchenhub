@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 
+
 // =========================
 // ADMIN LOGIN
 // =========================
@@ -9,7 +10,6 @@ router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // 🔥 SIMPLE STATIC ADMIN (you can later move to DB)
     const adminEmail = "admin@gmail.com";
     const adminPassword = "123456";
 
@@ -19,10 +19,9 @@ router.post("/login", async (req, res) => {
       });
     }
 
-    // 🔥 CREATE TOKEN
     const token = jwt.sign(
       { role: "admin", email },
-      "secretKey123", // ⚠️ later move to .env
+      process.env.JWT_SECRET || "secretKey123",
       { expiresIn: "1d" }
     );
 
