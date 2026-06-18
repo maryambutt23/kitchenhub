@@ -10,6 +10,18 @@ const app = express();
 
 
 // =====================
+// CRASH HANDLERS (IMPORTANT)
+// =====================
+process.on("uncaughtException", (err) => {
+  console.log("❌ Uncaught Exception:", err);
+});
+
+process.on("unhandledRejection", (err) => {
+  console.log("❌ Unhandled Rejection:", err);
+});
+
+
+// =====================
 // MIDDLEWARE
 // =====================
 app.use(cors());
@@ -66,9 +78,9 @@ app.use((err, req, res, next) => {
 
 
 // =====================
-// DATABASE + SERVER (FIXED FOR RAILWAY)
+// DATABASE + SERVER (RAILWAY SAFE)
 // =====================
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 8080;
 
 mongoose
   .connect(process.env.MONGO_URI)
@@ -79,11 +91,12 @@ mongoose
       console.log(`🚀 Server running on port ${PORT}`);
     });
 
-    server.on("error", (err) => {
-      console.log("❌ Server error:", err.message);
-    });
+    // Prevent Railway timeout issues
+    server.keepAliveTimeout = 120000;
+    server.headersTimeout = 120000;
 
   })
   .catch((err) => {
     console.log("❌ MongoDB Connection Error:", err.message);
+    process.exit(1);
   });
