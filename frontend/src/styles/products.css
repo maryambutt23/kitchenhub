@@ -1,0 +1,115 @@
+/* =========================
+   PAGE CONTAINER ANIMATION
+========================= */
+.category-page {
+  padding: 50px 20px;
+  background: #0b0b0b;
+  min-height: 100vh;
+  color: #fff;
+
+  animation: pageFade 0.6s ease-in-out;
+}
+
+@keyframes pageFade {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================
+   HEADER (NO TEXT CHANGE)
+========================= */
+.category-page h1 {
+  animation: slideDown 0.7s ease forwards;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================
+   PARAGRAPH (NO TEXT CHANGE)
+========================= */
+.category-page p {
+  animation: fadeUp 0.8s ease forwards;
+  animation-delay: 0.2s;
+
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================
+   GRID CARDS (SMOOTH STAGGER FEEL)
+========================= */
+.category-card {
+  opacity: 0;
+  transform: translateY(25px);
+  animation: cardIn 0.6s ease forwards;
+}
+
+/* simulate stagger */
+.category-card:nth-child(1) { animation-delay: 0.1s; }
+.category-card:nth-child(2) { animation-delay: 0.2s; }
+.category-card:nth-child(3) { animation-delay: 0.3s; }
+.category-card:nth-child(4) { animation-delay: 0.4s; }
+.category-card:nth-child(5) { animation-delay: 0.5s; }
+.category-card:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes cardIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================
+   HOVER EFFECT (UNCHANGED DESIGN)
+========================= */
+.category-card {
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.category-card:hover {
+  transform: translateY(-10px);
+}
+
+/* =========================
+   IMAGE ZOOM (UNCHANGED STYLE)
+========================= */
+.category-card img {
+  transition: transform 0.6s ease;
+}
+
+.category-card:hover img {
+  transform: scale(1.1);
+}
+
+/* =========================
+   BUTTON HOVER (NO TEXT CHANGE)
+========================= */
+.category-card button {
+  transition: all 0.3s ease;
+}
+
+.category-card button:hover {
+  transform: scale(1.05);
+}
