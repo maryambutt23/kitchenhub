@@ -28,12 +28,13 @@ function App() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
 
+  // SAFE: handles /admin, /admin/* routes
   const isAdminRoute = location.pathname.startsWith("/admin");
 
   return (
     <div className="app-container">
 
-      {/* MAIN NAVBAR ONLY FOR USER SITE */}
+      {/* USER NAVBAR ONLY */}
       {!isAdminRoute && (
         <>
           <Navbar onMenuClick={() => setOpen(true)} />
@@ -45,7 +46,7 @@ function App() {
 
         <Routes>
 
-          {/* PUBLIC */}
+          {/* ================= PUBLIC ROUTES ================= */}
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<Products />} />
           <Route path="/products/:category" element={<CategoryPage />} />
@@ -55,9 +56,11 @@ function App() {
           <Route path="/order-success" element={<OrderSuccess />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/about" element={<About />} />
-          {/* ADMIN */}
+
+          {/* ================= ADMIN LOGIN ================= */}
           <Route path="/admin" element={<AdminLogin />} />
 
+          {/* ================= ADMIN DASHBOARD ================= */}
           <Route
             path="/admin/dashboard"
             element={
@@ -69,6 +72,7 @@ function App() {
             }
           />
 
+          {/* ================= ADMIN ORDERS ================= */}
           <Route
             path="/admin/orders"
             element={
@@ -80,6 +84,7 @@ function App() {
             }
           />
 
+          {/* ================= ADMIN PRODUCTS ================= */}
           <Route
             path="/admin/products"
             element={
@@ -95,6 +100,7 @@ function App() {
 
       </div>
 
+      {/* TOAST NOTIFICATIONS */}
       <ToastContainer
         position="top-right"
         autoClose={2000}

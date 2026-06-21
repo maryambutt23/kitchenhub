@@ -13,14 +13,17 @@ import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 
 export default function Navbar({ onMenuClick }) {
-
   const navigate = useNavigate();
   const { cart } = useCart();
 
+  // admin token (optional use later)
   const token = localStorage.getItem("adminToken");
 
-  // total cart items
-  const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+  // FIX: safe qty handling
+  const totalItems = cart.reduce(
+    (sum, item) => sum + (item.qty || item.quantity || 1),
+    0
+  );
 
   return (
     <AppBar position="fixed" sx={{ background: "#0b0b0b" }}>
@@ -40,59 +43,38 @@ export default function Navbar({ onMenuClick }) {
         {/* RIGHT SIDE */}
         <Box sx={{ display: "flex", gap: 3, alignItems: "center" }}>
 
-          {/* HOME */}
           <Typography
             onClick={() => navigate("/")}
-            sx={{
-              cursor: "pointer",
-              color: "#fff",
-              fontWeight: 500,
-              "&:hover": { color: "#d4af37" }
-            }}
+            sx={{ cursor: "pointer", color: "#fff", fontWeight: 500 }}
           >
             Home
           </Typography>
 
-          {/* PRODUCTS */}
           <Typography
             onClick={() => navigate("/products")}
-            sx={{
-              cursor: "pointer",
-              color: "#fff",
-              fontWeight: 500,
-              "&:hover": { color: "#d4af37" }
-            }}
+            sx={{ cursor: "pointer", color: "#fff", fontWeight: 500 }}
           >
             Products
           </Typography>
 
-          {/* ABOUT */}
           <Typography
             onClick={() => navigate("/about")}
-            sx={{
-              cursor: "pointer",
-              color: "#fff",
-              fontWeight: 500,
-              "&:hover": { color: "#d4af37" }
-            }}
+            sx={{ cursor: "pointer", color: "#fff", fontWeight: 500 }}
           >
             About
           </Typography>
 
-          {/* ADMIN (ONLY IF LOGGED IN) */}
-          {token && (
-            <Typography
-              onClick={() => navigate("/admin/dashboard")}
-              sx={{
-                cursor: "pointer",
-                color: "#d4af37",
-                fontWeight: "bold",
-                "&:hover": { opacity: 0.8 }
-              }}
-            >
-              Admin
-            </Typography>
-          )}
+          {/* ADMIN BUTTON (FIXED FOR NETLIFY) */}
+          <Typography
+            onClick={() => navigate("/admin")}
+            sx={{
+              cursor: "pointer",
+              color: "#d4af37",
+              fontWeight: "bold"
+            }}
+          >
+            Admin
+          </Typography>
 
           {/* CART */}
           <IconButton
@@ -105,7 +87,6 @@ export default function Navbar({ onMenuClick }) {
           </IconButton>
 
         </Box>
-
       </Toolbar>
     </AppBar>
   );
