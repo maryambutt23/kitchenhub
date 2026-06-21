@@ -25,7 +25,19 @@ export default function AdminLogin() {
         form
       );
 
-      localStorage.setItem("adminToken", res.data.token);
+      console.log("LOGIN RESPONSE:", res.data);
+
+      // ✅ SAFE TOKEN EXTRACTION
+      const token = res.data?.token;
+
+      if (!token) {
+        alert("Login failed: Token not received from server");
+        return;
+      }
+
+      // ✅ store in both (safe approach)
+      localStorage.setItem("adminToken", token);
+      sessionStorage.setItem("adminToken", token);
 
       alert("Login successful");
 
@@ -77,7 +89,6 @@ const styles = {
     alignItems: "center",
     background: "#0b0b0b",
   },
-
   box: {
     width: "350px",
     padding: "30px",
@@ -85,12 +96,10 @@ const styles = {
     borderRadius: "12px",
     textAlign: "center",
   },
-
   title: {
     color: "#d4af37",
     marginBottom: "20px",
   },
-
   input: {
     width: "100%",
     padding: "10px",
@@ -100,7 +109,6 @@ const styles = {
     background: "#000",
     color: "#fff",
   },
-
   button: {
     width: "100%",
     padding: "10px",

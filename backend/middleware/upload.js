@@ -1,14 +1,27 @@
-const multer = require("multer");
+const jwt = require("jsonwebtoken");
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
+const verifyAdmin = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+    return res.status(401).json({ message: "No token provided" });
   }
-});
 
-const upload = multer({ storage });
+  const token = authHeader.startsWith("Bearer ")
+    ? authHeader.split(" ")[1]
+    : authHeader;
 
-module.exports = upload;
+  if (!token) {
+    return res.status(401).json({ message: "Token missing after parsing" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, "SECRET_KEY");
+    req.admin = decoded;
+    next();
+  } catch (err) {
+    return res.status(401).json({ message: "Invalid token" });
+  }
+};
+
+module.exports = verifyAdmin;
