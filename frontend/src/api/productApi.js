@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:5000/api/products";
+const BASE_URL = "https://kitchenhub--maryambutt23.replit.app/api/products";
 
 // =====================
 // GET ALL PRODUCTS

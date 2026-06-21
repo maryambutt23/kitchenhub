@@ -53,7 +53,7 @@ export default function Checkout() {
         totalPrice: total,
       };
 
-      await axios.post("http://localhost:5000/api/orders", orderData);
+      await axios.post("https://kitchenhub--maryambutt23.replit.app/api/orders", orderData);
 
       alert("🎉 Order placed successfully!");
 

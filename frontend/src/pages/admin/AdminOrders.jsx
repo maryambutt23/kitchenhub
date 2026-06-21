@@ -11,7 +11,7 @@ export default function AdminOrders() {
   // ================= FETCH ORDERS =================
   const fetchOrders = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/orders", {
+   const res = await axios.get("https://kitchenhub--maryambutt23.replit.app/api/orders", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -32,7 +32,7 @@ export default function AdminOrders() {
   const updateStatus = async (id, status) => {
     try {
       await axios.put(
-        `http://localhost:5000/api/orders/${id}`,
+        `https://kitchenhub--maryambutt23.replit.app/api/orders/${id}`,
         { status },
         {
           headers: {
@@ -52,7 +52,7 @@ export default function AdminOrders() {
   const deleteOrder = async (id) => {
     try {
       await axios.delete(
-        `http://localhost:5000/api/orders/${id}`,
+        `https://kitchenhub--maryambutt23.replit.app/api/orders/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -115,8 +115,9 @@ export default function AdminOrders() {
                       item.image?.startsWith("http")
                         ? item.image
                         : item.image?.startsWith("/uploads")
-                        ? `http://localhost:5000${item.image}`
+                        ? `https://kitchenhub--maryambutt23.replit.app${item.image}`
                         : item.image
+                        
                     }
                     alt={item.name}
                     style={{

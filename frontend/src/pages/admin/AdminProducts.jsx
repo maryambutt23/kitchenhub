@@ -21,7 +21,7 @@ export default function AdminProducts() {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:5000/api/products");
+      const res = await axios.get("https://kitchenhub--maryambutt23.replit.app/api/products");
       setProducts(res.data);
     } catch (err) {
       console.log(err);
@@ -50,7 +50,7 @@ export default function AdminProducts() {
     data.append("image", imageFile);
 
     const res = await axios.post(
-      "http://localhost:5000/api/products/upload",
+      "https://kitchenhub--maryambutt23.replit.app/api/products/upload",
       data,
       {
         headers: {
@@ -78,12 +78,12 @@ export default function AdminProducts() {
 
       if (editId) {
         await axios.put(
-          `http://localhost:5000/api/products/${editId}`,
+          `https://kitchenhub--maryambutt23.replit.app/api/products/${editId}`,
           productData
         );
       } else {
         await axios.post(
-          "http://localhost:5000/api/products",
+          "https://kitchenhub--maryambutt23.replit.app/api/products",
           productData
         );
       }
@@ -127,7 +127,7 @@ export default function AdminProducts() {
   // ================= DELETE =================
   const deleteProduct = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/products/${id}`);
+      await axios.delete(`https://kitchenhub--maryambutt23.replit.app/api/products/${id}`);
       fetchProducts();
     } catch (err) {
       console.log(err);
@@ -219,10 +219,10 @@ export default function AdminProducts() {
                   product.image?.startsWith("http")
                     ? product.image
                     : product.image?.startsWith("/uploads")
-                      ? `http://localhost:5000${product.image}`
+                      ? `https://kitchenhub--maryambutt23.replit.app${product.image}`
                       : product.image?.startsWith("/images")
                         ? product.image
-                        : `http://localhost:5000${product.image}`
+                          : `https://kitchenhub--maryambutt23.replit.app${product.image}`
                 }
                 alt={product.name}
                 style={styles.image}

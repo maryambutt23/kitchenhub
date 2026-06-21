@@ -8,93 +8,55 @@ dotenv.config();
 
 const app = express();
 
-
 // =====================
 // MIDDLEWARE
 // =====================
-
 app.use(cors());
-
 app.use(express.json());
 
-
 // =====================
-// STATIC UPLOADS
+// STATIC FILES (UPLOADS)
 // =====================
-
 app.use(
   "/uploads",
   express.static(path.join(__dirname, "uploads"))
 );
 
-
 // =====================
 // ROUTES
 // =====================
-
 const productRoutes = require("./routes/productRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const authRoutes = require("./routes/authRoutes");
 
-
 app.use("/api/products", productRoutes);
-
 app.use("/api/orders", orderRoutes);
-
 app.use("/api/auth", authRoutes);
-
 
 // =====================
 // TEST ROUTE
 // =====================
-
 app.get("/", (req, res) => {
-
   res.send("KitchenHub Backend Running 🚀");
-
 });
 
-
 // =====================
-// SERVER PORT
+// PORT
 // =====================
-
 const PORT = process.env.PORT || 8080;
 
-
 // =====================
-// START SERVER FIRST
+// DATABASE + SERVER START
 // =====================
-
-app.listen(PORT, "0.0.0.0", () => {
-
-  console.log(
-    `🚀 Server running on port ${PORT}`
-  );
-
-});
-
-
-// =====================
-// DATABASE CONNECTION
-// =====================
-
 mongoose
   .connect(process.env.MONGO_URI)
-
   .then(() => {
+    console.log("✅ MongoDB Connected Successfully");
 
-    console.log(
-      "✅ MongoDB Connected Successfully"
-    );
-
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`🚀 Server running on port ${PORT}`);
+    });
   })
-
   .catch((err) => {
-
-    console.log(
-      "❌ MongoDB Error:",
-      err.message
-    );
-
+    console.log("❌ MongoDB Error:", err.message);
   });

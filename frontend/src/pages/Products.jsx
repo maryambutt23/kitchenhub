@@ -19,7 +19,7 @@ export default function Products() {
   const getImageUrl = (img) => {
     if (!img) return "";
     if (img.startsWith("http")) return img;
-    if (img.startsWith("/uploads")) return `http://localhost:5000${img}`;
+    if (img.startsWith("/uploads")) return `https://kitchenhub--maryambutt23.replit.app${img}`;
     return img;
   };
 

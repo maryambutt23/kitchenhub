@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = "http://localhost:5000/api/orders";
+const API = "https://kitchenhub--maryambutt23.replit.app/api/orders";
 
 // =====================
 // PLACE ORDER (PUBLIC)

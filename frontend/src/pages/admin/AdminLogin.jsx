@@ -21,7 +21,7 @@ export default function AdminLogin() {
       setLoading(true);
 
       const res = await axios.post(
-        "http://localhost:5000/api/auth/login",
+        "https://kitchenhub--maryambutt23.replit.app/api/auth/login",
         form
       );
 

@@ -19,7 +19,7 @@ export default function CategoryPage() {
 
         setLoading(true);
 
-        const res = await axios.get("http://localhost:5000/api/products");
+        const res = await axios.get("https://kitchenhub--maryambutt23.replit.app/api/products");
 
         // ✅ CLEAN NORMALIZER
         const normalize = (text) =>

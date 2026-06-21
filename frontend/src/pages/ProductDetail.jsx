@@ -21,8 +21,8 @@ export default function ProductDetail() {
         setLoading(true);
 
         const res = await axios.get(
-          `http://localhost:5000/api/products/${id}`
-        );
+     `https://kitchenhub--maryambutt23.replit.app/api/products/${id}`
+      );
 
         setProduct(res.data);
 

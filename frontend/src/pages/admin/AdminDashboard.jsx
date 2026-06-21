@@ -9,7 +9,7 @@ export default function AdminDashboard() {
       try {
         const token = localStorage.getItem("adminToken");
 
-        const res = await axios.get("http://localhost:5000/api/orders", {
+        const res = await axios.get("https://kitchenhub--maryambutt23.replit.app/api/orders", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
